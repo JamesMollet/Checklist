@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Checklist</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Daily Checklist</h1>
+    <p id="selected-label">Select a day on the calendar</p>
+  </header>
+
+  <main>
+    <section id="calendar-section">
+      <div id="cal-nav">
+        <button type="button" id="btn-prev" aria-label="Previous month">&larr;</button>
+        <h2 id="month-label"></h2>
+        <button type="button" id="btn-next" aria-label="Next month">&rarr;</button>
+        <button type="button" id="btn-today">Today</button>
+      </div>
+      <div id="calendar"></div>
+      <p class="legend">
+        <span><span class="swatch complete"></span> Today: all done</span>
+        <span><span class="swatch partial"></span> Today: some done</span>
+        <span><span class="swatch pending"></span> Today: none done</span>
+        <span class="legend-note">Past days are faded; future days stay white until that date.</span>
+      </p>
+    </section>
+
+    <section id="tasks-section">
+      <div class="task-block">
+        <h3>Every day</h3>
+        <p class="hint">These repeat on every date.</p>
+        <ul id="everyday-list" class="task-list"></ul>
+        <form id="form-everyday" class="add-form">
+          <input type="text" id="input-everyday" placeholder="Add everyday task…" autocomplete="off" required>
+          <button type="submit">Add</button>
+        </form>
+      </div>
+
+      <div class="task-block">
+        <h3 id="day-tasks-title">This day only</h3>
+        <p class="hint">Tasks just for the selected date.</p>
+        <ul id="day-list" class="task-list"></ul>
+        <form id="form-day" class="add-form">
+          <input type="text" id="input-day" placeholder="Add task for this day…" autocomplete="off" required>
+          <button type="submit">Add</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
