@@ -100,6 +100,7 @@ function ensureDone(key) {
 
 function dayStatus(key) {
   if (!isTracked(key)) return "empty";
+  if (isFuture(key)) return "future";
   const tasks = tasksForDay(key);
   const done = state.done[key] || {};
   if (!tasks.length) {
@@ -127,7 +128,7 @@ const futureStyle = { fill: "#fff", text: "#cbd5e1" };
 
 function cellColors(key) {
   if (isBeforeTracking(key)) return preStartStyle;
-  if (isFuture(key)) return futureStyle;
+  if (status === "future") return futureStyle;
   const status = dayStatus(key);
   if (dayColors[status]) return dayColors[status];
   if (key === todayKey()) return { fill: "#dbeafe", text: "#334155" };
