@@ -128,8 +128,8 @@ const futureStyle = { fill: "#fff", text: "#cbd5e1" };
 
 function cellColors(key) {
   if (isBeforeTracking(key)) return preStartStyle;
-  if (status === "future") return futureStyle;
   const status = dayStatus(key);
+  if (status === "future") return futureStyle;
   if (dayColors[status]) return dayColors[status];
   if (key === todayKey()) return { fill: "#dbeafe", text: "#334155" };
   return { fill: "#fff", text: "#334155" };
