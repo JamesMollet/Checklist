@@ -58,8 +58,20 @@ function todayKey() {
   return dateKey(new Date());
 }
 
+function compareDays(keyA, keyB) {
+  const a = parseKey(keyA);
+  const b = parseKey(keyB);
+  a.setHours(0, 0, 0, 0);
+  b.setHours(0, 0, 0, 0);
+  return a - b;
+}
+
 function isBeforeTracking(key) {
-  return key < TRACKING_START;
+  return compareDays(key, TRACKING_START) < 0;
+}
+
+function isTracked(key) {
+  return !isBeforeTracking(key);
 }
 
 function uid() {
@@ -78,9 +90,17 @@ function ensureDone(key) {
 }
 
 function dayStatus(key) {
+  if (!isTracked(key)) return "empty";
   const tasks = tasksForDay(key);
-  if (!tasks.length) return "empty";
   const done = state.done[key] || {};
+  if (!tasks.length) {
+    const saved = Object.keys(done);
+    if (!saved.length) return "empty";
+    const n = saved.filter(id => done[id]).length;
+    if (n === 0) return "pending";
+    if (n === saved.length) return "complete";
+    return "partial";
+  }
   const n = tasks.filter(t => done[t.id]).length;
   if (n === tasks.length) return "complete";
   if (n > 0) return "partial";
@@ -204,14 +224,18 @@ function renderCalendar() {
     .attr("x", 2)
     .attr("y", 2)
     .attr("rx", 6)
-    .attr("fill", d => cellColors(dateKey(d.date)).fill);
+    .style("fill", d => cellColors(dateKey(d.date)).fill);
 
   dayG.selectAll("text.day-num").data(d => [d]).join("text")
     .attr("class", "day-num")
     .attr("x", cellSize / 2)
     .attr("y", cellSize / 2 + 4)
     .attr("text-anchor", "middle")
-    .attr("fill", d => cellColors(dateKey(d.date)).text)
+    .style("fill", d => cellColors(dateKey(d.date)).text)
+    .style("font-weight", d => {
+      const key = dateKey(d.date);
+      return isTracked(key) && dayStatus(key) !== "empty" ? "600" : "400";
+    })
     .text(d => d.date.getDate());
 }
 

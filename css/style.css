@@ -103,31 +103,8 @@ main {
   stroke-width: 2;
 }
 
-.day-cell.complete rect { fill: #22c55e; }
-.day-cell.partial rect { fill: #facc15; }
-.day-cell.pending rect { fill: #ef4444; }
+/* Calendar cell colors are set in JS (style.fill) so they persist correctly per day */
 
-.day-cell.complete text,
-.day-cell.pending text {
-  fill: #fff;
-  font-weight: 600;
-}
-
-.day-cell.partial text {
-  fill: #713f12;
-  font-weight: 600;
-}
-
-.day-cell.pre-start rect { fill: #e2e8f0; }
-.day-cell.pre-start text { fill: #94a3b8; }
-
-.day-cell.today:not(.complete):not(.partial):not(.pending):not(.pre-start) rect {
-  fill: #dbeafe;
-}
-
-.day-cell.other-month text {
-  fill: #94a3b8;
-}
 
 .day-label {
   font-size: 10px;
