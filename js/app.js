@@ -1,4 +1,6 @@
 const STORAGE_KEY = "checklist-data";
+/** First day to track progress (May 25, 2026). Earlier dates stay gray. */
+const TRACKING_START = "2026-05-25";
 
 const state = loadState();
 
@@ -56,13 +58,8 @@ function todayKey() {
   return dateKey(new Date());
 }
 
-/** Negative = past, 0 = today, positive = future */
-function dayOffset(key) {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const d = parseKey(key);
-  d.setHours(0, 0, 0, 0);
-  return Math.round((d - today) / 86400000);
+function isBeforeTracking(key) {
+  return key < TRACKING_START;
 }
 
 function uid() {
@@ -96,16 +93,14 @@ const dayColors = {
   pending:  { fill: "#ef4444", text: "#fff" }
 };
 
-const pastStyle = { fill: "#f1f5f9", text: "#94a3b8" };
-const futureStyle = { fill: "#fff", text: "#cbd5e1" };
+const preStartStyle = { fill: "#e2e8f0", text: "#94a3b8" };
 
 function cellColors(key) {
-  const off = dayOffset(key);
-  if (off > 0) return futureStyle;
-  if (off < 0) return pastStyle;
+  if (isBeforeTracking(key)) return preStartStyle;
   const status = dayStatus(key);
   if (dayColors[status]) return dayColors[status];
-  return { fill: "#dbeafe", text: "#334155" };
+  if (key === todayKey()) return { fill: "#dbeafe", text: "#334155" };
+  return { fill: "#fff", text: "#334155" };
 }
 
 function setSelected(key) {
@@ -190,14 +185,12 @@ function renderCalendar() {
     })
     .attr("class", d => {
       const key = dateKey(d.date);
-      const off = dayOffset(key);
       let cls = "day-cell";
       if (!d.inMonth) cls += " other-month";
       if (key === state.currentDay) cls += " selected";
-      if (off > 0) cls += " future";
-      else if (off < 0) cls += " past";
+      if (key === today) cls += " today";
+      if (isBeforeTracking(key)) cls += " pre-start";
       else {
-        cls += " today";
         const status = dayStatus(key);
         if (status !== "empty") cls += " " + status;
       }

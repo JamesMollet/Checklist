@@ -118,21 +118,11 @@ main {
   font-weight: 600;
 }
 
-.day-cell.past rect { fill: #f1f5f9; }
-.day-cell.past text { fill: #94a3b8; }
+.day-cell.pre-start rect { fill: #e2e8f0; }
+.day-cell.pre-start text { fill: #94a3b8; }
 
-.day-cell.future rect { fill: #fff; }
-.day-cell.future text { fill: #cbd5e1; }
-
-.day-cell.today:not(.complete):not(.partial):not(.pending) rect {
+.day-cell.today:not(.complete):not(.partial):not(.pending):not(.pre-start) rect {
   fill: #dbeafe;
-}
-
-.legend-note {
-  width: 100%;
-  font-size: 0.7rem;
-  color: #94a3b8;
-  margin-top: 0.15rem;
 }
 
 .day-cell.other-month text {
@@ -171,6 +161,7 @@ main {
 .swatch.complete { background: #22c55e; border-color: #16a34a; }
 .swatch.partial { background: #facc15; border-color: #ca8a04; }
 .swatch.pending { background: #ef4444; border-color: #dc2626; }
+.swatch.pre-start { background: #e2e8f0; border-color: #cbd5e1; }
 
 #tasks-section {
   display: flex;
