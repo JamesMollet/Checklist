@@ -74,6 +74,15 @@ function isTracked(key) {
   return !isBeforeTracking(key);
 }
 
+function isFuture(key) {
+  return compareDays(key, todayKey()) > 0;
+}
+
+/** Show green/yellow/red only for today and past tracked days */
+function showsProgress(key) {
+  return isTracked(key) && !isFuture(key);
+}
+
 function uid() {
   return "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 }
@@ -114,9 +123,11 @@ const dayColors = {
 };
 
 const preStartStyle = { fill: "#e2e8f0", text: "#94a3b8" };
+const futureStyle = { fill: "#fff", text: "#cbd5e1" };
 
 function cellColors(key) {
   if (isBeforeTracking(key)) return preStartStyle;
+  if (isFuture(key)) return futureStyle;
   const status = dayStatus(key);
   if (dayColors[status]) return dayColors[status];
   if (key === todayKey()) return { fill: "#dbeafe", text: "#334155" };
@@ -210,6 +221,7 @@ function renderCalendar() {
       if (key === state.currentDay) cls += " selected";
       if (key === today) cls += " today";
       if (isBeforeTracking(key)) cls += " pre-start";
+      else if (isFuture(key)) cls += " future";
       else {
         const status = dayStatus(key);
         if (status !== "empty") cls += " " + status;
@@ -234,7 +246,7 @@ function renderCalendar() {
     .style("fill", d => cellColors(dateKey(d.date)).text)
     .style("font-weight", d => {
       const key = dateKey(d.date);
-      return isTracked(key) && dayStatus(key) !== "empty" ? "600" : "400";
+      return showsProgress(key) && dayStatus(key) !== "empty" ? "600" : "400";
     })
     .text(d => d.date.getDate());
 }
